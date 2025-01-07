@@ -2227,6 +2227,7 @@ run(function()
 					local attacked, sword, meta = {}, getAttackData()
 					Attacking = false
 					store.KillauraTarget = nil
+					pcall(function() vapeTargetInfo.Targets.Killaura = nil end)
 					if sword then
 						local plrs = entitylib.AllPosition({
 							Range = Range.Value,
@@ -2250,7 +2251,16 @@ run(function()
 
 								table.insert(attacked, v)
 								targetinfo.Targets[v] = tick() + 1
-
+								pcall(function()
+									local plr = v
+									vapeTargetInfo.Targets.Killaura = {
+										Humanoid = {
+											Health = (plr.Character:GetAttribute("Health") or plr.Humanoid.Health) + getShieldAttribute(plr.Character),
+											MaxHealth = plr.Character:GetAttribute("MaxHealth") or plr.Humanoid.MaxHealth
+										},
+										Player = plr.Player
+									}
+								end)
 								if not Attacking then
 									Attacking = true
 									store.KillauraTarget = v
@@ -2271,7 +2281,7 @@ run(function()
 								if actualRoot then
 									local dir = CFrame.lookAt(selfpos, actualRoot.Position).LookVector
 									local pos = selfpos + dir * math.max(delta.Magnitude - 14.399, 0)
-									bedwars.SwordController.lastAttack = workspace:GetServerTimeNow()
+									bedwars.SwordController.lastAttack = game.Workspace:GetServerTimeNow()
 									store.attackReach = (delta.Magnitude * 100) // 1 / 100
 									store.attackReachUpdate = tick() + 1
 									AttackRemote:FireServer({
