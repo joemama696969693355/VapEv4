@@ -2685,8 +2685,7 @@ end)
 		Name = 'Swing only',
 		Tooltip = 'Only attacks while swinging manually'
 	})
-end)
-	
+end
 run(function()
 	local Value
 	local start
